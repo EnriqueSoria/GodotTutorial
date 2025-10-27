@@ -21,6 +21,9 @@ func show_game_over():
 	
 func update_score(score):
 	$ScoreLabel.text = str(score)
+	
+func set_lifes(lifes):
+	$Lifes.text = "❤️".repeat(lifes)
 
 func _on_start_button_pressed():
 	$StartButton.hide()

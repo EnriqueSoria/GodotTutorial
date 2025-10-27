@@ -5,14 +5,19 @@ var score
 
 
 func game_over() -> void:
-	$ScoreTimer.stop()
-	$MobTimer.stop()
-	$HUD.show_game_over()
+	$HUD.set_lifes($Player.lifes)
+	
+	if $Player.is_dead():
+		$ScoreTimer.stop()
+		$MobTimer.stop()
+		$HUD.show_game_over()
+		
 
 func new_game():
 	score = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
+	$HUD.set_lifes($Player.lifes)
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready")
 

@@ -2,17 +2,39 @@ extends Area2D
 signal hit
 
 @export var speed = 400 # How fast the player will move (pixels/sec).
+@export var lifes = 2;
+
 var screen_size # Size of the game window.
 
+
+func is_dead():
+	return lifes == 0
+	
+func is_low_life():
+	return lifes == 1
+
 func _on_body_entered(_body):
-	print("hit _on_body_entered")
-	hide() # Player disappears after being hit.
+	lifes -= 1
+	
+	if is_dead():
+		hide() # Player disappears after being hit.
+	elif is_low_life():
+		# Change color to low life
+		$AnimatedSprite2D.modulate = Color(1.0, 0.0, 0.0, 1.0)
+		
 	hit.emit()
-	# Must be deferred as we can't change physics properties on a physics callback.
-	$CollisionShape2D.set_deferred("disabled", true)
+	
+	if is_dead():
+		# Must be deferred as we can't change physics properties on a physics callback.
+		$CollisionShape2D.set_deferred("disabled", true)
 	
 func start(pos):
 	position = pos
+	
+	# Reset state
+	lifes = 2
+	$AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	
 	show()
 	$CollisionShape2D.disabled = false
 
