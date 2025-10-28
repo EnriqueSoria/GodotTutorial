@@ -49,7 +49,6 @@ radius = 34.0
 height = 86.0
 
 [node name="Mob" type="RigidBody2D"]
-collision_mask = 0
 gravity_scale = 0.0
 script = ExtResource("1_1qmh0")
 
@@ -65,3 +64,5 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_b3mxk")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
