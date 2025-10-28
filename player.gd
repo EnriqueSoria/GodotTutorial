@@ -39,6 +39,7 @@ func start(pos):
 	$CollisionShape2D.disabled = false
 
 func _ready():
+	hide()
 	screen_size = get_viewport_rect().size
 
 func _process(delta):
@@ -52,11 +53,11 @@ func _process(delta):
 
 	if velocity.length() > 10:
 		velocity = velocity.normalized() * speed
+		if velocity.x != 0:
+			$AnimatedSprite2D.flip_h = velocity.x < 0
+		if velocity.y != 0:
+			$AnimatedSprite2D.flip_v = velocity.y > 0
 		
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
 	
-	if velocity.x != 0:
-		$AnimatedSprite2D.flip_h = velocity.x < 0
-	if velocity.y != 0:
-		$AnimatedSprite2D.flip_v = velocity.y > 0
