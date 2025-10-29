@@ -1,6 +1,7 @@
 extends Node
 
 @export var mob_scene: PackedScene
+@export var life_scene: PackedScene
 var score
 
 
@@ -55,6 +56,9 @@ func _on_mob_timer_timeout() -> void:
 
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
+
+func _on_life_timer_timeout() -> void:
+	pass
 
 func _ready():
 	pass # new_game()
