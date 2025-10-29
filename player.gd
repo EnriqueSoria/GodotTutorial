@@ -43,21 +43,21 @@ func _ready():
 	screen_size = get_viewport_rect().size
 
 func _process(delta):
-	$AnimatedSprite2D.animation = "walk"
+	
 	$AnimatedSprite2D.play()
 	
-	var velocity = Vector2.ZERO # The player's movement vector.
-
-
-	velocity = get_local_mouse_position()
+	var velocity = get_local_mouse_position()
 
 	if velocity.length() > 10:
 		velocity = velocity.normalized() * speed
-		if velocity.x != 0:
-			$AnimatedSprite2D.flip_h = velocity.x < 0
-		if velocity.y != 0:
-			$AnimatedSprite2D.flip_v = velocity.y > 0
 		
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
 	
+
+	if velocity.x:
+		$AnimatedSprite2D.flip_h = velocity.x < 0
+	if velocity.y:
+		$AnimatedSprite2D.flip_v = velocity.y > 0
+	if velocity.y > 20:
+		$AnimatedSprite2D.animation = "up"
