@@ -16,6 +16,9 @@ func is_low_life():
 func _on_body_entered(_body):
 	lifes -= 1
 	
+	# Hide the mob
+	_body.hide()
+	
 	if is_dead():
 		hide() # Player disappears after being hit.
 	elif is_low_life():
