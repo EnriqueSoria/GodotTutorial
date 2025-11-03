@@ -1,9 +1,24 @@
 extends Node
 
 @export var mob_scene: PackedScene
-@export var life_scene: PackedScene
+@export var life_scene: PackedScene = preload("res://life.tscn")
 var score
 
+
+func add_life():
+	if $Player.lifes >= $Player.max_lifes:
+		return false
+		
+	$Player.lifes += 1
+	$HUD.set_lifes($Player.lifes)
+	return true
+	
+func remove_life():
+	$Player.lifes -= 1
+	$HUD.set_lifes($Player.lifes)
+	
+func reset_life_timer():
+	$LifeTimer.start()
 
 func game_over() -> void:
 	$HUD.set_lifes($Player.lifes)
@@ -25,6 +40,7 @@ func new_game():
 func _on_start_timer_timeout() -> void:
 	$MobTimer.start()
 	$ScoreTimer.start()
+	$LifeTimer.start()
 
 
 func _on_score_timer_timeout() -> void:
@@ -57,8 +73,20 @@ func _on_mob_timer_timeout() -> void:
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
 
-func _on_life_timer_timeout() -> void:
-	pass
 
 func _ready():
-	pass # new_game()
+	pass 
+	
+func _process(_delta: float) -> void:
+	if $Player.lifes:
+		$HUD.set_lifes($Player.lifes)
+
+
+func _on_life_timer_timeout() -> void:
+	var life = life_scene.instantiate()
+	
+	life.position = Vector2(
+		randf_range(0, $Player.screen_size.x),
+		randf_range(0, $Player.screen_size.y),
+	)
+	add_child(life)
