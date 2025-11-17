@@ -3,6 +3,7 @@ extends Node
 @export var mob_scene: PackedScene
 @export var life_scene: PackedScene = preload("res://life.tscn")
 var score
+var difficulty_levl = 0
 
 
 func add_life():
@@ -31,6 +32,7 @@ func game_over() -> void:
 
 func new_game():
 	score = 0
+	difficulty_levl = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
 	$HUD.set_lifes($Player.lifes)
@@ -45,6 +47,9 @@ func _on_start_timer_timeout() -> void:
 
 func _on_score_timer_timeout() -> void:
 	score += 1
+	difficulty_levl = score / 10
+	$MobTimer.wait_time = max(1.5 - (difficulty_levl * 0.5), 0.25)
+	#print("wait_time", $MobTimer.wait_time)
 	$HUD.update_score(score)
 
 
@@ -67,7 +72,9 @@ func _on_mob_timer_timeout() -> void:
 	mob.rotation = direction
 
 	# Choose the velocity for the mob.
-	var velocity = Vector2(randf_range(150.0, 250.0), 0.0)
+	var velocity_multiplier = 1 + (difficulty_levl * 0.25)
+	#print("velocity_multiplier", velocity_multiplier)
+	var velocity = Vector2(randf_range(150.0*velocity_multiplier, 250.0*velocity_multiplier), 0.0)
 	mob.linear_velocity = velocity.rotated(direction)
 
 	# Spawn the mob by adding it to the Main scene.
