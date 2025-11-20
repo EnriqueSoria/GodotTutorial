@@ -27,6 +27,7 @@ func game_over() -> void:
 	
 	if $Player.is_dead():
 		remove_all_mobs()
+		remove_all_life_items()
 		$ScoreTimer.stop()
 		$MobTimer.stop()
 		$HUD.show_game_over()
@@ -86,6 +87,10 @@ func _on_mob_timer_timeout() -> void:
 func remove_all_mobs():
 	get_tree().call_group("mobs", "queue_free")
 
+
+func remove_all_life_items():
+	get_tree().call_group("lifes", "queue_free")
+	
 
 func _ready():
 	pass 
