@@ -8,6 +8,7 @@ var difficulty_levl = 0
 
 func add_life():
 	if $Player.lifes >= $Player.max_lifes:
+		remove_all_mobs()
 		return false
 		
 	$Player.lifes += 1
@@ -25,6 +26,7 @@ func game_over() -> void:
 	$HUD.set_lifes($Player.lifes)
 	
 	if $Player.is_dead():
+		remove_all_mobs()
 		$ScoreTimer.stop()
 		$MobTimer.stop()
 		$HUD.show_game_over()
@@ -79,6 +81,10 @@ func _on_mob_timer_timeout() -> void:
 
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
+
+
+func remove_all_mobs():
+	get_tree().call_group("mobs", "queue_free")
 
 
 func _ready():

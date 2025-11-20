@@ -14,8 +14,8 @@ func _process(_delta: float) -> void:
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	var main = area.get_parent()
 	if main.has_method("add_life"):
-		var life_added = main.add_life()
-		if life_added:
-			main.reset_life_timer()
-			queue_free()
+		var _life_added = main.add_life()
+		# if life_added: ...
+		main.reset_life_timer()
+		queue_free()
 		
