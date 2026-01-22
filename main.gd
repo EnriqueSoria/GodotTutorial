@@ -1,7 +1,6 @@
 extends Node
 
 @export var mob_scene: PackedScene
-@export var superpower_scene: PackedScene = preload("res://superpower.tscn")
 @export var life_scene: PackedScene = preload("res://life.tscn")
 var score
 var difficulty_levl = 0
@@ -16,9 +15,6 @@ func add_life():
 	$HUD.set_lifes($Player.lifes)
 	return true
 	
-func remove_life():
-	$Player.lifes -= 1
-	$HUD.set_lifes($Player.lifes)
 	
 func reset_life_timer():
 	$LifeTimer.start()
@@ -27,10 +23,10 @@ func game_over() -> void:
 	$HUD.set_lifes($Player.lifes)
 	
 	if $Player.is_dead():
-		remove_all_mobs()
-		remove_all_life_items()
 		$ScoreTimer.stop()
 		$MobTimer.stop()
+		remove_all_mobs()
+		remove_all_life_items()
 		$HUD.show_game_over()
 		
 
@@ -102,6 +98,9 @@ func _process(_delta: float) -> void:
 
 
 func _on_life_timer_timeout() -> void:
+	if not $Player.lifes:
+		return
+		
 	var life = life_scene.instantiate()
 	
 	life.position = Vector2(

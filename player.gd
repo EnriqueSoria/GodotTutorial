@@ -26,13 +26,15 @@ func is_low_life():
 	return lifes == 1
 
 func _on_body_entered(body):
-	hit.emit()
-	
 	if not has_shield():
 		lifes -= 1
 	
-	# Remove creep 
+	# Emit hit (this calls game_over)
+	hit.emit()
+	
+	# Hide mob
 	body.hide()
+	
 	
 func start(pos):
 	position = pos
@@ -40,6 +42,7 @@ func start(pos):
 	# Reset state
 	lifes = initial_lifes
 	$AnimatedSprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	remove_shield()
 	
 	show()
 	$CollisionShape2D.disabled = false
@@ -58,14 +61,19 @@ func _process(delta):
 		
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
-	$Superpower/Sprite2D.position = position
-	$Superpower/Sprite2D.rotate(delta)
+	
+	if has_shield():
+		$Superpower/Sprite2D.position = position
+		$Superpower/Sprite2D.rotate(delta)
 	
 	if is_dead():
 		hide() # Player disappears after being hit.
 		# Must be deferred as we can't change physics properties on a physics callback.
 		$CollisionShape2D.set_deferred("disabled", true)
-	elif is_low_life():
+	elif lifes == 2:
+		# Change color to low life
+		$AnimatedSprite2D.modulate = Color(1.0, 0.75, 0.75, 1.0)
+	elif lifes == 1:
 		# Change color to low life
 		$AnimatedSprite2D.modulate = Color(1.0, 0.0, 0.0, 1.0)
 	else:
