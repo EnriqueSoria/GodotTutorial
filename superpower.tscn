@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkear4j7oljvs"]
+
+[ext_resource type="Script" uid="uid://clsmpc56ncu37" path="res://superpower.gd" id="1_jnk7h"]
+[ext_resource type="Texture2D" uid="uid://cak7pg72hx0ye" path="res://art/onda.png" id="1_mhl4x"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jnk7h"]
+radius = 53.08484
+
+[node name="Superpower" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mhl4x")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_jnk7h")
+script = ExtResource("1_jnk7h")
+
+[connection signal="area_entered" from="Area2D" to="Area2D/CollisionShape2D" method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="Area2D" to="Area2D/CollisionShape2D" method="_on_body_entered"]

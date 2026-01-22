@@ -1,6 +1,7 @@
 extends Node
 
 @export var mob_scene: PackedScene
+@export var superpower_scene: PackedScene = preload("res://superpower.tscn")
 @export var life_scene: PackedScene = preload("res://life.tscn")
 var score
 var difficulty_levl = 0
@@ -8,7 +9,7 @@ var difficulty_levl = 0
 
 func add_life():
 	if $Player.lifes >= $Player.max_lifes:
-		remove_all_mobs()
+		$Player.add_shield()
 		return false
 		
 	$Player.lifes += 1

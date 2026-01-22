@@ -6,7 +6,18 @@ signal hit
 var initial_lifes = 2
 var max_lifes = 3
 @export var screen_size: Vector2 # Size of the game window.
+@onready var superpower = get_node("Superpower")
 
+
+func add_shield():
+	$Superpower/Sprite2D.visible = true
+	$Superpower/Timer.start()
+	
+func remove_shield():
+	$Superpower/Sprite2D.visible = false
+	
+func has_shield():
+	return $Superpower/Sprite2D.visible
 
 func is_dead():
 	return lifes == 0
@@ -15,10 +26,13 @@ func is_low_life():
 	return lifes == 1
 
 func _on_body_entered(body):
-	lifes -= 1
-	body.hide()
 	hit.emit()
-		
+	
+	if not has_shield():
+		lifes -= 1
+	
+	# Remove creep 
+	body.hide()
 	
 func start(pos):
 	position = pos
@@ -35,7 +49,6 @@ func _ready():
 	screen_size = get_viewport_rect().size
 
 func _process(delta):
-	
 	$AnimatedSprite2D.play()
 	
 	var velocity = get_local_mouse_position()
@@ -45,6 +58,8 @@ func _process(delta):
 		
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
+	$Superpower/Sprite2D.position = position
+	$Superpower/Sprite2D.rotate(delta)
 	
 	if is_dead():
 		hide() # Player disappears after being hit.
@@ -63,3 +78,7 @@ func _process(delta):
 		$AnimatedSprite2D.flip_v = velocity.y > 0
 	if velocity.y > 20:
 		$AnimatedSprite2D.animation = "up"
+
+
+func _on_timer_timeout() -> void:
+	remove_shield()
